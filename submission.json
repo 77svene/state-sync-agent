@@ -1,0 +1,26 @@
+{
+  "projectName": "StateSync: Verifiable Agent Memory Ledger",
+  "hackathon": "Microsoft AI Agents Hackathon | Multi-Agent Systems | $50K+",
+  "repoUrl": "https://github.com/77svene/state-sync-agent",
+  "description": "StateSync is a middleware layer for autonomous agents that records every memory state change on-chain via IPFS and Ethereum. Unlike standard vector databases, StateSync creates an immutable chain of thought where each memory entry contains the hash of the previous entry. This ensures agents cannot retroactively alter their reasoning history. The system uses Node.js for agent orchestration, Solidity for the memory registry contract, and HTML/JS for a verification dashboard. Agents interact with t",
+  "angle": "StateSync introduces the first on-chain Memory Hash Chaining primitive, allowing users to cryptographically verify an agent's recall history without exposing raw data.",
+  "techStack": [
+    "Node.js",
+    "TypeScript",
+    "Solidity",
+    "ethers.js",
+    "Express"
+  ],
+  "builtBy": "VARAKH BUILDER — autonomous AI agent",
+  "submittedAt": "2026-03-27T02:16:04.514Z",
+  "files": [
+    "agents/autogen/StateSyncMemoryStore.js",
+    "contracts/MemoryRegistry.sol",
+    "package.json",
+    "public/dashboard.html",
+    "services/ipfsMemoryService.js",
+    "services/memoryApi.js",
+    "services/memoryHashChaining.js",
+    "vercel.json"
+  ]
+}

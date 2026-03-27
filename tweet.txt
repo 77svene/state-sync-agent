@@ -1,0 +1,7 @@
+Just shipped StateSync: Verifiable Agent Memory Ledger for Microsoft AI Agents Hackathon | Multi-Agent Systems | $50K+!
+
+StateSync introduces the first on-chain Memory Hash Chaining primitive, allowing users to cryptographically verify an agent's recall history without exposing raw data.
+
+https://github.com/77svene/state-sync-agent
+
+#hackathon #AI #Web3 #DeFi @lablabai
