@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StateSync | Memory Chain Verifier</title>
+    <script crossorigin="anonymous" integrity="sha384-9gQk8x0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q......" src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin="anonymous" integrity="sha384-9gQk8x0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0......" src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script crossorigin="anonymous" integrity="sha384-9gQk8x0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0q0......" src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js" type="application/javascript"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 100%); color: #e0e0e0; min-height: 100vh; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        header { text-align: center; padding: 30px 0; border-bottom: 2px solid #00d4ff; margin-bottom: 30px; }
+        h1 { font-size: 2.5rem; color: #00d4ff; text-shadow: 0 0 20px rgba(0, 212, 255, 0.5); }
+        .subtitle { color: #888; margin-top: 10px; font-size: 1.1rem; }
+        .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .card { background: rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 20px; border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); }
+        .card h2 { color: #00d4ff; margin-bottom: 15px; font-size: 1.3rem; }
+        .chain-visualization { display: flex; flex-direction: column; gap: 10px; max-height: 500px; overflow-y: auto; }
+        .chain-entry { display: flex; align-items: center; gap: 10px; padding: 12px; background: rgba(0, 212, 255, 0.1); border-radius: 8px; border-left: 3px solid #00d4ff; transition: all 0.3s ease; }
+        .chain-entry:hover { background: rgba(0, 212, 255, 0.2); transform: translateX(5px); }
+        .chain-entry.valid { border-left-color: #00ff88; }
+        .chain-entry.invalid { border-left-color: #ff4444; }
+        .chain-entry .hash { font-family: 'Courier New', monospace; font-size: 0.75rem; color: #888; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .chain-entry .hash-link { font-family: 'Courier New', monospace; font-size: 0.7rem; color: #00d4ff; cursor: pointer; text-decoration: underline; }
+        .chain-entry .hash-link:hover { color: #00ff88; }
+        .chain-entry .status { width: 12px; height: 12px; border-radius: 50%; }
+        .chain-entry .status.valid { background: #00ff88; box-shadow: 0 0 10px #00ff88; }
+        .chain-entry .status.invalid { background: #ff4444; box-shadow: 0 0 10px #ff4444; }
+        .chain-entry .timestamp { font-size: 0.7rem; color: #666; }
+        .chain-entry .agent { font-size: 0.7rem; color: #888; }
+        .verification-panel { background: rgba(0, 0, 0, 0.3); border-radius: 8px; padding: 15px; margin-top: 15px; }
+        .verification-result { font-family: 'Courier New', monospace; font-size: 0.85rem; padding: 10px; background: rgba(255, 255, 255, 0.05); border-radius: 6px; margin-top: 10px; }
+        .verification-result.success { color: #00ff88; border: 1px solid #00ff88; }
+        .verification-result.error { color: #ff4444; border: 1px solid #ff4444; }
+        .controls { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .btn { padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 0.9rem; transition: all 0.3s ease; }
+        .btn-primary { background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%); color: #fff; }
+        .btn-primary:hover { background: linear-gradient(135deg, #00ff88 0%, #00cc66 100%); transform: translateY(-2px); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #e0e0e0; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
+        .btn-danger { background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%); color: #fff; }
+        .btn-danger:hover { background: linear-gradient(135deg, #ff6666 0%, #ff3333 100%); }
+        .input-group { display: flex; gap: 10px; flex: 1; min-width: 200px; }
+        .input-group input { flex: 1; padding: 10px; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 6px; background: rgba(0, 0, 0, 0.3); color: #e0e0e0; font-family: 'Courier New', monospace; }
+        .input-group input:focus { outline: none; border-color: #00d4ff; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px; }
+        .stat-card { background: rgba(0, 212, 255, 0.1); border-radius: 8px; padding: 15px; text-align: center; border: 1px solid rgba(0, 212, 255, 0.3); }
+        .stat-card .value { font-size: 1.8rem; font-weight: bold; color: #00d4ff; }
+        .stat-card .label { font-size: 0.8rem; color: #888; margin-top: 5px; }
+        .chain-link { display: flex; align-items: center; gap: 5px; }
+        .chain-link::after { content: '→'; color: #00d4ff; font-size: 1.2rem; }
+        .chain-link:last-child::after { content: ''; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 1000; justify-content: center; align-items: center; }
+        .modal.active { display: flex; }
+        .modal-content { background: #1a1a3e; border-radius: 12px; padding: 30px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; border: 1px solid #00d4ff; }
+        .modal-content h3 { color: #00d4ff; margin-bottom: 20px; }
+        .modal-content pre { background: rgba(0, 0, 0, 0.5); padding: 15px; border-radius: 6px; overflow-x: auto; font-family: 'Courier New', monospace; font-size: 0.85rem; }
+        .modal-close { position: absolute; top: 20px; right: 20px; background: none; border: none; color: #888; font-size: 1.5rem; cursor: pointer; }
+        .modal-close:hover { color: #00d4ff; }
+        .loading { display: inline-block; width: 20px; height: 20px; border: 3px solid rgba(0, 212, 255, 0.3); border-radius: 50%; border-top-color: #00d4ff; animation: spin 1s ease-in-out infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; }
+        .badge-success { background: rgba(0, 255, 136, 0.2); color: #00ff88; }
+        .badge-warning { background: rgba(255, 193, 7, 0.2); color: #ffc107; }
+        .badge-danger { background: rgba(255, 68, 68, 0.2); color: #ff4444; }
+        .badge-info { background: rgba(0, 212, 255, 0.2); color: #00d4ff; }
+        .integrity-check { display: flex; align-items: center; gap: 10px; margin-top: 15px; padding: 15px; background: rgba(0, 0, 0, 0.3); border-radius: 8px; }
+        .integrity-check .check-icon { font-size: 1.5rem; }
+        .integrity-check .check-text { font-size: 0.9rem; }
+        .integrity-check .check-icon.valid { color: #00ff88; }
+        .integrity-check .check-icon.invalid { color: #ff4444; }
+        .session-selector { display: flex; gap: 10px; align-items: center; margin-bottom: 15px; }
+        .session-selector select { flex: 1; padding: 10px; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 6px; background: rgba(0, 0, 0, 0.3); color: #e0e0e0; }
+        .session-selector select:focus { outline: none; border-color: #00d4ff; }
+        .memory-content { font-size: 0.8rem; color: #aaa; margin-top: 5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .hash-truncated { color: #00d4ff; cursor: pointer; }
+        .hash-truncated:hover { color: #00ff88; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState, useEffect, useCallback } = React;
+
+        const CONTRACT_ABI = [
+            "function registerMemory(bytes32 memoryHash, bytes32 previousChainHash, bytes32 merkleRoot, uint256 timestamp, uint256 batchId, address agentAddress) external returns (uint256)",
+            "function getMemoryEntry(uint256 entryId) external view returns (bytes32 memoryHash, bytes32 previousChainHash, bytes32 merkleRoot, uint256 timestamp, uint256 batchId, address agentAddress, bool isPruned)",
+            "function getChainState() external view returns (bytes32 globalRoot, uint256 totalEntries, uint256 lastBatchId)",
+            "function getBatch(uint256 batchId) external view returns (bytes32 root, uint256 startEntryId, uint256 endEntryId, uint256 createdAt, bool isFinalized)",
+            "event MemoryRegistered(uint256 indexed entryId, bytes32 memoryHash, bytes32 previousChainHash, address indexed agentAddress)",
+            "event BatchFinalized(uint256 indexed batchId, bytes32 merkleRoot, uint256 entryCount)"
+        ];
+
+        const CONTRACT_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+
+        function App() {
+            const [chainEntries, setChainEntries] = useState([]);
+            const [sessions, setSessions] = useState([]);
+            const [selectedSession, setSelectedSession] = useState('');
+            const [isVerifying, setIsVerifying] = useState(false);
+            const [verificationResult, setVerificationResult] = useState(null);
+            const [stats, setStats] = useState({ totalEntries: 0, totalBatches: 0, globalRoot: '0x0000000000000000000000000000000000000000000000000000000000000000' });
+            const [selectedEntry, setSelectedEntry] = useState(null);
+            const [provider, setProvider] = useState(null);
+            const [contract, setContract] = useState(null);
+            const [isLoading, setIsLoading] = useState(true);
+
+            useEffect(() => {
+                const initProvider = async () => {
+                    if (typeof window.ethereum !== 'undefined') {
+                        try {
+                            const web3Provider = new ethers.providers.Web3Provider(window.ethereum);
+                            await web3Provider.send("eth_requestAccounts", []);
+                            setProvider(web3Provider);
+                            const signer = web3Provider.getSigner();
+                            const contractInstance = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+                            setContract(contractInstance);
+                            await loadChainData(contractInstance);
+                        } catch (error) {
+                            console.error('Failed to connect to wallet:', error);
+                            await loadMockData();
+                        }
+                    } else {
+                        await loadMockData();
+                    }
+                };
+                initProvider();
+            }, []);
+
+            const loadMockData = async () => {
+                const mockEntries = [
+                    { entryId: 1, memoryHash: '0x' + 'a'.repeat(64), previousChainHash: '0x' + '0'.repeat(64), merkleRoot: '0x' + 'b'.repeat(64), timestamp: Math.floor(Date.now() / 1000) - 3600, batchId: 1, agentAddress: '0x70997970C51812dc3A010C7d01b50e0d17dc79C8', isPruned: false },
+                    { entryId: 2, memoryHash: '0x' + 'c'.repeat(64), previousChainHash: '0x' + 'a'.repeat(64), merkleRoot: '0x' + 'd'.repeat(64), timestamp: Math.floor(Date.now() / 1000) - 1800, batchId: 1, agentAddress: '0x70997970C51812dc3A010C7d01b50e0d17dc79C8', isPruned: false },
+                    { entryId: 3, memoryHash: '0x' + 'e'.repeat(64), previousChainHash: '0x' + 'c'.repeat(64), merkleRoot: '0x' + 'f'.repeat(64), timestamp: Math.floor(Date.now() / 1000), batchId: 2, agentAddress: '0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2', isPruned: false },
+                    { entryId: 4, memoryHash: '0x' + '1'.repeat(64), previousChainHash: '0x' + 'e'.repeat(64), merkleRoot: '0x' + '2'.repeat(64), timestamp: Math.floor(Date.now() / 1000) + 100, batchId: 2, agentAddress: '0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2', isPruned: false },
+                    { entryId: 5, memoryHash: '0x' + '3'.repeat(64), previousChainHash: '0x' + '1'.repeat(64), merkleRoot: '0x' + '4'.repeat(64), timestamp: Math.floor(Date.now() / 1000) + 200, batchId: 3, agentAddress: '0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2', isPruned: false }
+                ];
+                setChainEntries(mockEntries);
+                setSessions(['session-001', 'session-002', 'session-003']);
+                setSelectedSession('session-001');
+                setStats({ totalEntries: 5, totalBatches: 3, globalRoot: '0x' + '5'.repeat(64) });
+                setIsLoading(false);
+            };
+
+            const loadChainData = async (contractInstance) => {
+                try {
+                    const chainState = await contractInstance.getChainState();
+                    setStats({
+                        totalEntries: chainState.totalEntries.toNumber(),
+                        totalBatches: chainState.lastBatchId.toNumber(),
+                        globalRoot: chainState.globalRoot
+                    });
+
+                    const entries = [];
+                    for (let i = 1; i <= chainState.totalEntries.toNumber(); i++) {
+                        const entry = await contractInstance.getMemoryEntry(i);
+                        entries.push({
+                            entryId: i,
+                            memoryHash: entry.memoryHash,
+                            previousChainHash: entry.previousChainHash,
+                            merkleRoot: entry.merkleRoot,
+                            timestamp: entry.timestamp.toNumber(),
+                            batchId: entry.batchId.toNumber(),
+                            agentAddress: entry.agentAddress,
+                            isPruned: entry.isPruned
+                        });
+                    }
+                    setChainEntries(entries);
+                    setSessions(['session-001', 'session-002']);
+                    setSelectedSession('session-001');
+                } catch (error) {
+                    console.error('Failed to load chain data:', error);
+                    await loadMockData();
+                } finally {
+                    setIsLoading(false);
+                }
+            };
+
+            const verifyChainIntegrity = useCallback(async () => {
+                setIsVerifying(true);
+                setVerificationResult(null);
+
+                try {
+                    let isValid = true;
+                    let errors = [];
+
+                    for (let i = 0; i < chainEntries.length; i++) {
+                        const currentEntry = chainEntries[i];
+                        if (i > 0) {
+                            const previousEntry = chainEntries[i - 1];
+                            if (currentEntry.previousChainHash !== previousEntry.memoryHash) {
+                                isValid = false;
+                                errors.push(`Entry ${currentEntry.entryId}: Chain link broken`);
+                            }
+                        }
+
+                        const expectedHash = ethers.utils.keccak256(
+                            ethers.utils.defaultAbiCoder.encode(
+                                ['bytes32', 'bytes32', 'bytes32', 'uint256', 'uint256', 'address', 'bool'],
+                                [
+                                    currentEntry.memoryHash,
+                                    currentEntry.previousChainHash,
+                                    currentEntry.merkleRoot,
+                                    currentEntry.timestamp,
+                                    currentEntry.batchId,
+                                    currentEntry.agentAddress,
+                                    currentEntry.isPruned
+                                ]
+                            )
+                        );
+
+                        if (expectedHash !== currentEntry.memoryHash) {
+                            isValid = false;
+                            errors.push(`Entry ${currentEntry.entryId}: Memory hash mismatch`);
+                        }
+                    }
+
+                    setVerificationResult({
+                        isValid,
+                        errors,
+                        timestamp: new Date().toISOString()
+                    });
+                } catch (error) {
+                    setVerificationResult({
+                        isValid: false,
+                        errors: [error.message],
+                        timestamp: new Date().toISOString()
+                    });
+                } finally {
+                    setIsVerifying(false);
+                }
+            }, [chainEntries]);
+
+            const truncateHash = (hash, length = 16) => {
+                return `${hash.slice(0, length + 2)}...${hash.slice(-length)}`;
+            };
+
+            const formatTimestamp = (timestamp) => {
+                return new Date(timestamp * 1000).toLocaleString();
+            };
+
+            const formatAgent = (address) => {
+                return `${address.slice(0, 6)}...${address.slice(-4)}`;
+            };
+
+            const openEntryModal = (entry) => {
+                setSelectedEntry(entry);
+            };
+
+            const closeEntryModal = () => {
+                setSelectedEntry(null);
+            };
+
+            const renderChainEntry = (entry, index) => {
+                const isValid = index === 0 || chainEntries[index - 1].memoryHash === entry.previousChainHash;
+                return (
+                    <div key={entry.entryId} className={`chain-entry ${isValid ? 'valid' : 'invalid'}`}>
+                        <div className={`status ${isValid ? 'valid' : 'invalid'}`}></div>
+                        <div className="chain-link">
+                            <span className="hash" onClick={() => openEntryModal(entry)} title={entry.memoryHash}>
+                                {truncateHash(entry.memoryHash)}
+                            </span>
+                        </div>
+                        <span className="timestamp">{formatTimestamp(entry.timestamp)}</span>
+                        <span className="agent">{formatAgent(entry.agentAddress)}</span>
+                        <span className="badge badge-info">Batch {entry.batchId}</span>
+                    </div>
+                );
+            };
+
+            if (isLoading) {
+                return (
+                    <div className="container">
+                        <header>
+                            <h1>StateSync</h1>
+                            <p className="subtitle">Verifiable Agent Memory Ledger</p>
+                        </header>
+                        <div style={{ textAlign: 'center', padding: '50px' }}>
+                            <div className="loading"></div>
+                            <p style={{ marginTop: '20px', color: '#888' }}>Initializing memory chain...</p>
+                        </div>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="container">
+                    <header>
+                        <h1>StateSync</h1>
+                        <p className="subtitle">Verifiable Agent Memory Ledger</p>
+                    </header>
+
+                    <div className="stats-grid">
+                        <div className="stat-card">
+                            <div className="value">{stats.totalEntries}</div>
+                            <div className="label">Total Entries</div>
+                        </div>
+                        <div className="stat-card">
+                            <div className="value">{stats.totalBatches}</div>
+                            <div className="label">Batches</div>
+                        </div>
+                        <div className="stat-card">
+                            <div className="value">{chainEntries.length}</div>
+                            <div className="label">Active Chain</div>
+                        </div>
+                        <div className="stat-card">
+                            <div className="value">{verificationResult?.isValid ? '✓' : '✗'}</div>
+                            <div className="label">Integrity</div>
+                        </div>
+                    </div>
+
+                    <div className="controls">
+                        <div className="session-selector">
+                            <select value={selectedSession} onChange={(e) => setSelectedSession(e.target.value)}>
+                                {sessions.map(session => (
+                                    <option key={session} value={session}>{session}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <button className="btn btn-primary" onClick={verifyChainIntegrity} disabled={isVerifying}>
+                            {isVerifying ? <div className="loading"></div> : 'Verify Chain'}
+                        </button>
+                        <button className="btn btn-secondary" onClick={() => window.location.reload()}>
+                            Refresh
+                        </button>
+                    </div>
+
+                    <div className="dashboard-grid">
+                        <div className="card">
+                            <h2>Memory Chain Visualization</h2>
+                            <div className="chain-visualization">
+                                {chainEntries.map((entry, index) => renderChainEntry(entry, index))}
+                            </div>
+                        </div>
+
+                        <div className="card">
+                            <h2>Chain Integrity Verification</h2>
+                            <div className="integrity-check">
+                                <span className="check-icon valid">🔒</span>
+                                <span className="check-text">Cryptographic hash chaining ensures tamper-evident memory</span>
+                            </div>
+                            <div className="verification-panel">
+                                <h3 style={{ color: '#00d4ff', marginBottom: '10px' }}>Verification Results</h3>
+                                {verificationResult ? (
+                                    <div className={`verification-result ${verificationResult.isValid ? 'success' : 'error'}`}>
+                                        <strong>{verificationResult.isValid ? '✓ Chain Integrity Verified' : '✗ Chain Integrity Failed'}</strong>
+                                        <p style={{ marginTop: '10px', fontSize: '0.85rem' }}>
+                                            Verified at: {new Date(verificationResult.timestamp).toLocaleString()}
+                                        </p>
+                                        {!verificationResult.isValid && verificationResult.errors.length > 0 && (
+                                            <ul style={{ marginTop: '10px', paddingLeft: '20px' }}>
+                                                {verificationResult.errors.map((error, i) => (
+                                                    <li key={i} style={{ color: '#ff4444' }}>{error}</li>
+                                                ))}
+                                            </ul>
+                                        )}
+                                    </div>
+                                ) : (
+                                    <div className="verification-result" style={{ color: '#888' }}>
+                                        Click "Verify Chain" to check integrity
+                                    </div>
+                                )}
+                            </div>
+                            <div style={{ marginTop: '20px' }}>
+                                <h3 style={{ color: '#00d4ff', marginBottom: '10px' }}>Global State</h3>
+                                <pre style={{ fontSize: '0.75rem', color: '#888' }}>
+                                    Global Root: {stats.globalRoot}<br/>
+                                    Total Entries: {stats.totalEntries}<br/>
+                                    Total Batches: {stats.totalBatches}
+                                </pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    {selectedEntry && (
+                        <div className="modal active" onClick={closeEntryModal}>
+                            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                                <button className="modal-close" onClick={closeEntryModal}>×</button>
+                                <h3>Memory Entry Details</h3>
+                                <pre>
+                                    Entry ID: {selectedEntry.entryId}<br/>
+                                    Memory Hash: {selectedEntry.memoryHash}<br/>
+                                    Previous Chain Hash: {selectedEntry.previousChainHash}<br/>
+                                    Merkle Root: {selectedEntry.merkleRoot}<br/>
+                                    Timestamp: {formatTimestamp(selectedEntry.timestamp)}<br/>
+                                    Batch ID: {selectedEntry.batchId}<br/>
+                                    Agent Address: {selectedEntry.agentAddress}<br/>
+                                    Is Pruned: {selectedEntry.isPruned ? 'Yes' : 'No'}
+                                </pre>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
