@@ -1,0 +1,43 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "public/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/public/$1"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://ipfs.io https://gateway.pinata.cloud; connect-src 'self' https://sepolia.infura.io https://api.ipfs.io;"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        }
+      ]
+    }
+  ],
+  "env": {
+    "NEXT_PUBLIC_VERCEL_ENV": "production",
+    "NEXT_PUBLIC_SEPOLIA_RPC_URL": "https://eth-sepolia.g.alchemy.com/v2/demo",
+    "NEXT_PUBLIC_CONTRACT_ADDRESS": "PLACEHOLDER_CONTRACT_ADDRESS"
+  }
+}
